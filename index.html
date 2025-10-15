@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Six Latest Time.com Stories</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Latest Six Stories from Time.com</h2>
+  <div id="stories">Loading...</div>
+  <script>
+    async function loadtheStories() 
+    {
+      try 
+      {
+        const res = await fetch('http://localhost:3000/getTimeStories');
+        const stories = await res.json();
+
+        const container = document.getElementById('stories');
+
+        // clear "Loading..."
+        container.innerHTML = ''; 
+
+        stories.forEach(story => {
+
+            //skip invalid ones
+            if(!story.link) 
+            return; 
+
+          const div = document.createElement('div');
+          div.className = 'story';
+          div.innerHTML = 
+          `<a href="${story.link}" target="_blank">${story.title}</a>`;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        document.getElementById('stories').innerText = 'Error loading stories....Please try again';
+        console.error(err);
+      }
+    }
+
+    loadtheStories();
+  </script>
+</body>
+</html>
